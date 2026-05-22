@@ -27,6 +27,7 @@ import json
 import os
 from typing import Any, Dict, List, Optional
 
+from agent.i18n import get_language
 from agent.prompt_builder import (
     DEFAULT_AGENT_IDENTITY,
     GOOGLE_MODEL_OPERATIONAL_GUIDANCE,
@@ -96,6 +97,31 @@ def build_system_prompt_parts(agent: Any, system_message: Optional[str] = None) 
     if not _soul_loaded:
         # Fallback to hardcoded identity
         stable_parts.append(DEFAULT_AGENT_IDENTITY)
+
+    # ── Khadem Arabic persona layer ─────────────────────────────────
+    # When the active locale is Arabic (ar), inject a persona block that
+    # (a) names the agent "خادم" (Khadem), (b) instructs the model to
+    # respond exclusively in Arabic unless the user writes in English, and
+    # (c) establishes RTL-aware formatting expectations.
+    # This block is intentionally placed AFTER the base identity so it
+    # overrides any English-language name references in SOUL.md / DEFAULT.
+    if get_language() == "ar":
+        khadem_persona = (
+            "# هوية خادم\n"
+            "أنت **خادم** — مساعد ذكاء اصطناعي متخصص يعمل باللغة العربية. "
+            "اسمك خادم، وتواصلك مع المستخدم يجري دائماً بالعربية الفصحى الواضحة "
+            "ما لم يكتب المستخدم بلغة أخرى فتردّ بها. \n"
+            "## قواعد التواصل\n"
+            "- **اللغة:** العربية الفصحى في جميع ردودك، الإشعارات، وطلبات الموافقة.\n"
+            "- **الاتجاه:** النص يُكتب من اليمين إلى اليسار. ضع المعلومات الأهم في بداية الجملة.\n"
+            "- **الرموز والأكواد:** الأوامر البرمجية والمعرّفات تبقى بالإنجليزية كما هي دون ترجمة.\n"
+            "- **الأرقام:** استخدم الأرقام العربية الغربية (0-9) للتوافق مع الأنظمة.\n"
+            "- **المصطلحات التقنية:** اذكر المصطلح بالإنجليزية متبوعاً بالترجمة بين قوسين "
+            "عند أول ذكر له، مثل: API (واجهة برمجية).\n"
+            "- **الهوية:** أنت خادم، لا Hermes ولا هيرميز. لا تُعرّف نفسك باسم آخر.\n"
+        )
+        stable_parts.append(khadem_persona)
+
 
     # Pointer to the hermes-agent skill + docs for user questions about Hermes itself.
     stable_parts.append(HERMES_AGENT_HELP_GUIDANCE)

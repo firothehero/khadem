@@ -25,7 +25,7 @@ Language resolution order:
     3. ``display.language`` from config.yaml
     4. ``"en"`` (baseline)
 
-Supported languages: en, zh, ja, de, es, fr, tr, uk.  Unknown values fall back to en.
+Supported languages: en, zh, ja, de, es, fr, tr, uk, ar.  Unknown values fall back to en.
 """
 
 from __future__ import annotations
@@ -42,6 +42,7 @@ logger = logging.getLogger(__name__)
 SUPPORTED_LANGUAGES: tuple[str, ...] = (
     "en", "zh", "zh-hant", "ja", "de", "es", "fr", "tr", "uk",
     "af", "ko", "it", "ga", "pt", "ru", "hu",
+    "ar",  # Arabic — Khadem primary language
 )
 DEFAULT_LANGUAGE = "en"
 
@@ -78,6 +79,12 @@ _LANGUAGE_ALIASES: dict[str, str] = {
     "russian": "ru", "русский": "ru", "ru-ru": "ru",
     # Hungarian
     "hungarian": "hu", "magyar": "hu", "hu-hu": "hu",
+    # Arabic — Khadem
+    "arabic": "ar", "عربي": "ar", "عربية": "ar",
+    "ar-sa": "ar", "ar-ae": "ar", "ar-eg": "ar", "ar-kw": "ar",
+    "ar-qa": "ar", "ar-bh": "ar", "ar-om": "ar", "ar-jo": "ar",
+    "ar-lb": "ar", "ar-sy": "ar", "ar-iq": "ar", "ar-ly": "ar",
+    "ar-ma": "ar", "ar-dz": "ar", "ar-tn": "ar",
 }
 
 _catalog_cache: dict[str, dict[str, str]] = {}
