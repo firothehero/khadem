@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 ARABIC_DEFAULTS: Mapping[str, Any] = {
     "display.language": "ar",  # UI strings: approvals, gateway replies, TUI, tips
     "stt.language": "ar",  # voice-memo transcription hint
+    "display.skin": "khadem",  # emerald/gold CLI+TUI skin with Arabic labels (skins.py)
 }
 
 

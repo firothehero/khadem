@@ -123,8 +123,10 @@ def test_persona_render():
 
 
 def test_defaults_only_fill_unset_keys():
-    assert defaults.missing_defaults({"display": {"language": "en"}}) == {"stt.language": "ar"}
-    assert defaults.missing_defaults({"display": {"language": "fr"}, "stt": {"language": ""}}) == {}
+    assert defaults.missing_defaults({"display": {"language": "en"}}) == {
+        "stt.language": "ar", "display.skin": "khadem"}
+    assert defaults.missing_defaults(
+        {"display": {"language": "fr", "skin": "ares"}, "stt": {"language": ""}}) == {}
 
 
 # ── bundled auto-load through the real plugin manager ────────────────────────────────────────
@@ -151,6 +153,11 @@ def test_khadem_autoloads_and_makes_the_agent_arabic(_isolate_env):
         assert "خادم" in i18n.t(key, lang="ar")
 
         assert {"arabic_text", "hijri_date"} <= set(loaded.tools_registered)
+
+        from hermes_cli.skin_engine import load_skin
+        skin = load_skin("khadem")
+        assert skin.name == "khadem" and skin.get_branding("agent_name") == "خادم"
+        assert "skin: khadem" in cfg
         section = mgr._system_prompt_sections["khadem.persona"]
         assert "خادم" in section.content({})
     finally:

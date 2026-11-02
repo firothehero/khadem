@@ -1,5 +1,7 @@
 # Khadem (خادم) — Arabic-first Hermes Agent
 
+الدليل العربي: [README.ar.md](README.ar.md)
+
 Khadem is a fork of [NousResearch/hermes-agent](https://github.com/NousResearch/hermes-agent) that
 turns it into an Arabic-first agent. The fork is built so that **upstream can be merged at any time
 and the Arabic experience keeps working**: nothing in upstream's files is edited.
@@ -11,8 +13,9 @@ and the Arabic experience keeps working**: nothing in upstream's files is edited
 | Branding | `plugins/khadem/branding.py` | At load time reads upstream's own `locales/ar.yaml` + `ar.tui.yaml` and registers a pack layer that renames Hermes → خادم (commands, paths, env vars untouched). New upstream strings are branded automatically. |
 | Arabic overrides | `plugins/khadem/locales/ar[.tui].yaml` (optional) | Khadem's own Arabic for keys upstream has not translated yet, or wording Khadem prefers. Wins over upstream. |
 | Persona | `plugins/khadem/persona.py` | Plugin system-prompt section: the agent is خادم, writes polished Modern Standard Arabic (or the user's dialect), RTL-aware documents, and today's Gregorian + Hijri date. English persona under non-Arabic locales. |
-| Arabic defaults | `plugins/khadem/defaults.py` | On a local home, writes `display.language: ar` and `stt.language: ar` **only if unset** — an explicit user choice always wins. |
+| Arabic defaults | `plugins/khadem/defaults.py` | On a local home, writes `display.language: ar`, `stt.language: ar` and `display.skin: khadem` **only if unset** — an explicit user choice always wins. |
 | Tools | `plugins/khadem/tools.py`, `arabic.py` | `arabic_text` (normalize, diacritics, Eastern/Western digits, number→words, money in words / تفقيط for 20 currencies, text stats) and `hijri_date` (official Umm al-Qura calendar, vendored table, 1343–1500 AH). |
+| CLI/TUI skin | `plugins/khadem/skins/khadem.yaml`, `skins.py` | Emerald/gold skin with Arabic labels and a KHADEM banner, installed into `<home>/skins/`; selected via `display.skin: khadem` only when unset. |
 | Skills | `plugins/khadem/skills/*` | `khadem:arabic-writing`, `arabic-translation`, `arabic-documents` (RTL Word/PDF/Excel/PPT/images), `arabic-dialects` (incl. Arabizi), `hijri-calendar`, `arabic-nlp`. |
 
 The plugin is a bundled `kind: backend` plugin, so it loads by default with no config entry.
@@ -44,6 +47,6 @@ core function Khadem relies on), upstream's i18n/system-prompt tests, and
 ## Patch ledger (edits to upstream files)
 
 None. Khadem-owned paths: `plugins/khadem/`, `tests/plugins/test_khadem_plugin.py`,
-`scripts/khadem/`, `.github/workflows/khadem-sync.yml`, `KHADEM.md`.
+`scripts/khadem/`, `.github/workflows/khadem-sync.yml`, `KHADEM.md`, `README.ar.md`.
 A merge conflict can therefore only come from a file someone edited outside this list — keep
 Khadem files as ours, take upstream for everything else.

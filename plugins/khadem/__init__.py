@@ -6,6 +6,7 @@ Everything Khadem changes lives in this plugin so the fork can merge upstream He
 * ``locales/``  — Khadem's Arabic gap-fills/stylistic overrides (applied above upstream);
 * ``persona``   — the Khadem identity as a plugin system-prompt section;
 * ``defaults``  — Arabic-by-default settings written once into config.yaml when unset;
+* ``skins``     — the emerald/gold Khadem CLI/TUI skin with Arabic labels;
 * ``tools``     — ``arabic_text`` and ``hijri_date``;
 * ``skills/``   — Arabic skills, loaded with ``skill_view("khadem:<name>")``.
 
@@ -18,7 +19,7 @@ import logging
 import os
 from pathlib import Path
 
-from . import branding, defaults, persona, tools
+from . import branding, defaults, persona, skins, tools
 
 logger = logging.getLogger(__name__)
 
@@ -84,4 +85,5 @@ def register(ctx) -> None:
     for name in names:
         ctx.register_skill(name, SKILLS_DIR / name / "SKILL.md")
 
+    skins.install_skin()
     defaults.apply_arabic_defaults()
