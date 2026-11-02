@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import { applyDocumentLocale, LOCALE_ENDONYMS } from "@hermes/shared/i18n";
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 import type { Locale, Translations } from "./types";
 import { en } from "./en";
 import { zh } from "./zh";
@@ -16,6 +17,7 @@ import { ga } from "./ga";
 import { pt } from "./pt";
 import { ru } from "./ru";
 import { hu } from "./hu";
+import { ar } from "./ar";
 
 const TRANSLATIONS: Record<Locale, Translations> = {
   en,
@@ -34,33 +36,17 @@ const TRANSLATIONS: Record<Locale, Translations> = {
   pt,
   ru,
   hu,
-};
-
-// Display metadata for the language picker — endonym (native name) so users
-// recognize their language even if they don't speak the current UI language,
-// plus a flag-icons sprite (ISO 3166-1 alpha-2) for visual scanning.
-// Exposed as a constant so the LanguageSwitcher and any future settings page
-// can share the same list.
-export const LOCALE_META: Record<Locale, { name: string; flagCountryCode: string }> = {
-  en: { name: "English", flagCountryCode: "gb" },
-  zh: { name: "简体中文", flagCountryCode: "cn" },
-  "zh-hant": { name: "繁體中文", flagCountryCode: "tw" },
-  ja: { name: "日本語", flagCountryCode: "jp" },
-  de: { name: "Deutsch", flagCountryCode: "de" },
-  es: { name: "Español", flagCountryCode: "es" },
-  fr: { name: "Français", flagCountryCode: "fr" },
-  tr: { name: "Türkçe", flagCountryCode: "tr" },
-  uk: { name: "Українська", flagCountryCode: "ua" },
-  af: { name: "Afrikaans", flagCountryCode: "za" },
-  ko: { name: "한국어", flagCountryCode: "kr" },
-  it: { name: "Italiano", flagCountryCode: "it" },
-  ga: { name: "Gaeilge", flagCountryCode: "ie" },
-  pt: { name: "Português", flagCountryCode: "pt" },
-  ru: { name: "Русский", flagCountryCode: "ru" },
-  hu: { name: "Magyar", flagCountryCode: "hu" },
+  ar,
 };
 
 const SUPPORTED_LOCALES = Object.keys(TRANSLATIONS) as Locale[];
+
+// Display metadata for the language picker — endonyms from @hermes/shared so the
+// desktop and web pickers can never disagree on a language's native name.
+export const LOCALE_META: Record<Locale, { name: string }> = Object.fromEntries(
+  SUPPORTED_LOCALES.map((id) => [id, { name: LOCALE_ENDONYMS[id] }]),
+) as Record<Locale, { name: string }>;
+
 const STORAGE_KEY = "hermes-locale";
 
 function isLocale(value: string): value is Locale {
@@ -100,6 +86,10 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       // ignore
     }
   }, []);
+
+  useEffect(() => {
+    applyDocumentLocale(locale);
+  }, [locale]);
 
   const value: I18nContextValue = {
     locale,
