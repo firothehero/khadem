@@ -1,0 +1,10 @@
+name: khadem
+version: 1.0.0
+description: "Khadem (خادم) — the Arabic-first distribution layer for Hermes Agent: خادم branding over the bundled Arabic catalogs, the Khadem persona, Arabic-by-default settings, Arabic text and Hijri-calendar tools, and Arabic skills. Lives entirely in this directory so upstream syncs never conflict."
+author: "Khadem"
+# Bundled `backend` plugins auto-load without a plugins.enabled entry, which keeps the Khadem layer on
+# by default with zero core edits. `hermes plugins disable khadem` still turns it off.
+kind: backend
+provides_tools:
+  - arabic_text
+  - hijri_date

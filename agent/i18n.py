@@ -61,9 +61,6 @@ _LANGUAGE_ALIASES: dict[str, str] = {
     "hungarian": "hu", "magyar": "hu", "hu-hu": "hu",
     "arabic": "ar", "العربية": "ar",
     "ar-sa": "ar", "ar-eg": "ar", "ar-ae": "ar", "ar-ma": "ar", "ar-dz": "ar",
-    # Khadem: colloquial names and the remaining Arab-region tags
-    "عربي": "ar", "عربية": "ar", "ar-kw": "ar", "ar-qa": "ar", "ar-bh": "ar", "ar-om": "ar",
-    "ar-jo": "ar", "ar-lb": "ar", "ar-sy": "ar", "ar-iq": "ar", "ar-ly": "ar", "ar-tn": "ar",
 }
 
 # (home, lang) -> merged catalog (packs over overlay over bundled). home -> supported tuple.

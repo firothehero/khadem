@@ -18,7 +18,6 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from agent.delegation_context import owned_kanban_task
-from agent.i18n import get_language
 from agent.prompt_builder import (
     DEFAULT_AGENT_IDENTITY, EXECUTION_GUIDANCE_MODELS, GOOGLE_MODEL_OPERATIONAL_GUIDANCE,
     HERMES_AGENT_HELP_GUIDANCE, HERMES_AGENT_HELP_GUIDANCE_NO_SKILLS, KANBAN_GUIDANCE,
@@ -554,28 +553,7 @@ def _identity_parts(agent: Any, ctx_len: Optional[int]) -> tuple[list[str], bool
     Returns ``(parts, soul_loaded)``."""
     wants_soul = agent.load_soul_identity or not agent.skip_context_files
     _soul_content = _pb.load_soul_md(ctx_len, home_override=_agent_home(agent)) if wants_soul else None
-    parts = [_soul_content] if _soul_content else [DEFAULT_AGENT_IDENTITY]
-    # Khadem: under the Arabic locale, layer the Arabic persona after the base
-    # identity so it overrides English name references in SOUL.md / the default.
-    if get_language() == "ar":
-        parts.append(KHADEM_PERSONA_AR)
-    return parts, bool(_soul_content)
-
-
-KHADEM_PERSONA_AR = (
-    "# هوية خادم\n"
-    "أنت **خادم** — مساعد ذكاء اصطناعي متخصص يعمل باللغة العربية. "
-    "اسمك خادم، وتواصلك مع المستخدم يجري دائماً بالعربية الفصحى الواضحة "
-    "ما لم يكتب المستخدم بلغة أخرى فتردّ بها.\n"
-    "## قواعد التواصل\n"
-    "- **اللغة:** العربية الفصحى في جميع ردودك، الإشعارات، وطلبات الموافقة.\n"
-    "- **الاتجاه:** النص يُكتب من اليمين إلى اليسار. ضع المعلومات الأهم في بداية الجملة.\n"
-    "- **الرموز والأكواد:** الأوامر البرمجية والمعرّفات تبقى بالإنجليزية كما هي دون ترجمة.\n"
-    "- **الأرقام:** استخدم الأرقام العربية الغربية (0-9) للتوافق مع الأنظمة.\n"
-    "- **المصطلحات التقنية:** اذكر المصطلح بالإنجليزية متبوعاً بالترجمة بين قوسين "
-    "عند أول ذكر له، مثل: API (واجهة برمجية).\n"
-    "- **الهوية:** أنت خادم، لا Hermes ولا هيرميز. لا تُعرّف نفسك باسم آخر.\n"
-)
+    return ([_soul_content], True) if _soul_content else ([DEFAULT_AGENT_IDENTITY], False)
 
 
 def _guidance_parts(agent: Any) -> list[str]:
