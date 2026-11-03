@@ -1,0 +1,71 @@
+# Managed by the Khadem plugin (plugins/khadem/skins/khadem.yaml): installed into <home>/skins and
+# selected when display.skin is unset. Edit a copy under another name to customise.
+name: khadem
+description: "خادم — Khadem: emerald and gold"
+colors:
+  banner_border: "#0F766E"
+  banner_title: "#D4AF37"
+  banner_accent: "#34D399"
+  banner_dim: "#0E7C66"
+  banner_text: "#ECFDF5"
+  ui_accent: "#10B981"
+  ui_label: "#D4AF37"
+  ui_ok: "#34D399"
+  ui_error: "#F87171"
+  ui_warn: "#FBBF24"
+  prompt: "#ECFDF5"
+  input_rule: "#0F766E"
+  response_border: "#D4AF37"
+  status_bar_bg: "#0B1F1A"
+  status_bar_text: "#B7C9C2"
+  status_bar_strong: "#D4AF37"
+  status_bar_dim: "#5E7F75"
+  status_bar_good: "#34D399"
+  status_bar_warn: "#FBBF24"
+  status_bar_bad: "#FB923C"
+  status_bar_critical: "#F87171"
+  session_label: "#D4AF37"
+  session_border: "#1F4D44"
+  completion_menu_bg: "#0B1F1A"
+  completion_menu_current_bg: "#14403A"
+  selection_bg: "#1C4A43"
+  shell_dollar: "#34D399"
+  voice_status_bg: "#0B1F1A"
+light_colors:
+  banner_title: "#9A7B1C"
+  banner_accent: "#047857"
+  banner_dim: "#0F766E"
+  banner_text: "#064E3B"
+  ui_accent: "#047857"
+  ui_label: "#8A6D16"
+  ui_ok: "#047857"
+  ui_error: "#B91C1C"
+  ui_warn: "#B45309"
+  prompt: "#064E3B"
+  response_border: "#9A7B1C"
+  session_label: "#8A6D16"
+  status_bar_bg: "#F3F7F5"
+  status_bar_text: "#4B6158"
+  status_bar_strong: "#9A7B1C"
+  status_bar_dim: "#7C918A"
+  completion_menu_bg: "#F3F7F5"
+  completion_menu_current_bg: "#D7EAE3"
+  selection_bg: "#D1EDE4"
+  shell_dollar: "#047857"
+  voice_status_bg: "#F3F7F5"
+spinner: {}
+branding:
+  agent_name: "خادم"
+  welcome: "مرحباً بك في خادم! اكتب رسالتك، أو /help لعرض الأوامر."
+  goodbye: "في أمان الله! ✦"
+  response_label: " ✦ خادم "
+  prompt_symbol: "❯"
+  help_header: "(✦) الأوامر المتاحة"
+tool_prefix: "┊"
+banner_logo: |
+  [bold #D4AF37]██╗  ██╗ ██╗  ██╗  █████╗  ██████╗  ███████╗ ███╗   ███╗[/]
+  [bold #D4AF37]██║ ██╔╝ ██║  ██║ ██╔══██╗ ██╔══██╗ ██╔════╝ ████╗ ████║[/]
+  [#34D399]█████╔╝  ███████║ ███████║ ██║  ██║ █████╗   ██╔████╔██║[/]
+  [#34D399]██╔═██╗  ██╔══██║ ██╔══██║ ██║  ██║ ██╔══╝   ██║╚██╔╝██║[/]
+  [#10B981]██║  ██╗ ██║  ██║ ██║  ██║ ██████╔╝ ███████╗ ██║ ╚═╝ ██║[/]
+  [#0F766E]╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═════╝  ╚══════╝ ╚═╝     ╚═╝[/]
