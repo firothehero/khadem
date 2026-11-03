@@ -68,4 +68,8 @@ jobs:
           fi
           body=$(printf '%s\n\n%s' "$note" "$summary")
           num=$(gh issue list --state open --search "in:title Upstream sync ready" --json number --jq '.[0].number' || true)
-          if [ -n "$num" ]; then gh issue comment "$num" --body "$body"; else gh issue create --title "Upstream sync ready" --body "$body"; fi
+          if [ -n "$num" ]; then gh issue comment "$num" --body "$body" && exit 0; else gh issue create --title "Upstream sync ready" --body "$body" && exit 0; fi
+          # Repository settings block both PRs and issues for the Actions token: leave the result in the
+          # run summary (the branch is already pushed when the push succeeded).
+          printf '%s\n\nOpen the PR: %s/%s/compare/%s...khadem/upstream-sync\n' "$body" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "${{ github.event.repository.default_branch }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "::warning::Upstream sync is ready on branch khadem/upstream-sync — open a PR (Actions may not create PRs/issues in this repo)."
