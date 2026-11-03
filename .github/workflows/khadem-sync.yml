@@ -10,6 +10,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  issues: write
 
 concurrency:
   group: khadem-upstream-sync
@@ -24,6 +25,9 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Optional PAT (repo + workflow scopes): the built-in token cannot push merges that touch
+          # .github/workflows, which upstream syncs often do. Without it, the job falls back to an issue.
+          token: ${{ secrets.KHADEM_SYNC_TOKEN || github.token }}
       - uses: astral-sh/setup-uv@v5
       - name: Configure git
         run: |
@@ -45,14 +49,23 @@ jobs:
           uv venv .venv
           uv pip install --python .venv/bin/python -e . pytest pytest-asyncio pytest-timeout
           PYTHON=.venv/bin/python scripts/khadem/check.sh | tee check.log
-      - name: Push branch and open PR
+      - name: Push branch and open PR (or report in an issue)
         if: steps.merge.outputs.changed == 'true'
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.KHADEM_SYNC_TOKEN || github.token }}
         run: |
-          git push --force-with-lease origin khadem/upstream-sync
-          body=$(printf 'Automated merge of upstream hermes-agent `main`.\n\n```\n%s\n```\n\nKhadem checks:\n```\n%s\n```\n' \
-            "$(tail -n 5 merge.log)" "$(tail -n 8 check.log)")
-          gh pr view khadem/upstream-sync >/dev/null 2>&1 \
-            && gh pr edit khadem/upstream-sync --body "$body" \
-            || gh pr create --head khadem/upstream-sync --title "Sync upstream hermes-agent" --body "$body"
+          summary=$(printf 'Automated merge of upstream `main`.\n\n```\n%s\n```\n\nKhadem checks:\n```\n%s\n```\n' \
+            "$(tail -n 5 merge.log)" "$(tail -n 12 check.log 2>/dev/null)")
+          if git push --force-with-lease origin khadem/upstream-sync; then
+            if gh pr view khadem/upstream-sync >/dev/null 2>&1; then
+              gh pr edit khadem/upstream-sync --body "$summary" && exit 0
+            else
+              gh pr create --head khadem/upstream-sync --title "Sync upstream" --body "$summary" && exit 0
+            fi
+            note="The branch \`khadem/upstream-sync\` was pushed but a pull request could not be opened (enable *Allow GitHub Actions to create and approve pull requests* in Settings → Actions, or add a \`KHADEM_SYNC_TOKEN\` secret). Open it from the branch."
+          else
+            note="The merge could not be pushed with the built-in token (upstream changed workflow files). Run \`scripts/khadem/sync-upstream.sh\` locally and push, or add a \`KHADEM_SYNC_TOKEN\` secret (PAT with repo + workflow scopes)."
+          fi
+          body=$(printf '%s\n\n%s' "$note" "$summary")
+          num=$(gh issue list --state open --search "in:title Upstream sync ready" --json number --jq '.[0].number' || true)
+          if [ -n "$num" ]; then gh issue comment "$num" --body "$body"; else gh issue create --title "Upstream sync ready" --body "$body"; fi

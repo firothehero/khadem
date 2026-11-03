@@ -34,6 +34,9 @@ core function Khadem relies on), upstream's i18n/system-prompt tests, and
 `scripts/khadem/i18n_report.py` (Arabic coverage: missing keys, stale overrides, branded count).
 
 `.github/workflows/khadem-sync.yml` does the same weekly and opens a PR from `khadem/upstream-sync`.
+The built-in Actions token cannot push merges that change `.github/workflows/` (upstream often
+does); add a `KHADEM_SYNC_TOKEN` secret (PAT with repo + workflow scopes) to make that fully
+automatic — without it the workflow opens an "Upstream sync ready" issue with the check results.
 
 ### When a sync reports something
 
